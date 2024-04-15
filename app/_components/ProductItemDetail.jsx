@@ -10,6 +10,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { UpdateCartContext } from "../_context/UpdateCartContext";
 
 function ProductItemDetail({ product }) {
+  console.log("product is : ", product);
   const [loading, setLoading] = useState(false);
   const { updateCart, setUpdateCart } = useContext(UpdateCartContext);
   const router = useRouter();
@@ -31,7 +32,7 @@ function ProductItemDetail({ product }) {
       }
       const data = {
         data: {
-          productId: product?.id,
+          product: product?.id,
           user_permissions_users: user?.id,
           amount: (productTotalPrice * quantity).toFixed(2),
           quantity,
@@ -51,10 +52,7 @@ function ProductItemDetail({ product }) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 p-7">
       <Image
-        src={
-          process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
-          product?.attributes?.images?.data[0]?.attributes?.url
-        }
+        src={product?.attributes?.images?.data[0]?.attributes?.url}
         alt={product?.attributes?.name}
         width={300}
         height={300}

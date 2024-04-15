@@ -15,10 +15,7 @@ const ProductItem = ({ product }) => {
   return (
     <div className="p-2 lg:p-6 h-full pb-3 flex flex-col items-center justify-center gap-3 rounded-lg border hover:scale-105 hover:shadow-md transition-all ease-in-out duration-300 cursor-pointer">
       <Image
-        src={
-          process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
-          product?.attributes?.images?.data[0]?.attributes?.url
-        }
+        src={product?.attributes?.images?.data[0]?.attributes?.url}
         alt={product?.attributes?.name}
         width={500}
         height={200}

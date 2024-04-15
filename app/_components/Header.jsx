@@ -23,6 +23,17 @@ import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { UpdateCartContext } from "../_context/UpdateCartContext";
 
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import CartItemList from "./CartItemList";
+
 function Header() {
   const user =
     typeof window !== "undefined"
@@ -46,10 +57,24 @@ function Header() {
   }, []);
 
   useEffect(() => {
+    console.log(categoryList);
+  }, [categoryList]);
+
+  useEffect(() => {
     if (jwt) {
       setIsLoggedIn(true);
     }
   }, [jwt]);
+
+  const [subtotal, setSubTotal] = useState(0);
+  useEffect(() => {
+    let total = 0;
+    cartItemsList?.forEach((element) => {
+      total += element?.amount;
+    });
+    const roundedOffTotal = total.toFixed(2);
+    setSubTotal(roundedOffTotal);
+  }, []);
 
   const signOut = () => {
     sessionStorage.clear();
@@ -105,10 +130,7 @@ function Header() {
                 >
                   <Image
                     unoptimized={true}
-                    src={
-                      process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
-                      category?.attributes?.icon?.data[0]?.attributes?.url
-                    }
+                    src={category?.attributes?.icon?.data[0]?.attributes?.url}
                     width={27}
                     height={27}
                     alt="icon"
@@ -127,12 +149,41 @@ function Header() {
       </div>
       <div className="flex items-center gap-5">
         {isLoggedIn && (
-          <h2 className="flex gap-2 items-center text-lg">
-            <ShoppingBasket className="size-7" />{" "}
-            <span className="bg-primary text-white px-2 rounded-full">
-              {totalCartItems}
-            </span>
-          </h2>
+          <Sheet>
+            <SheetTrigger>
+              <h2 className="flex gap-2 items-center text-lg">
+                <ShoppingBasket className="size-7" />{" "}
+                <span className="bg-primary text-white px-2 rounded-full">
+                  {totalCartItems}
+                </span>
+              </h2>
+            </SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle className="font-black text-xl mt-4">
+                  Your Cart
+                </SheetTitle>
+                <SheetDescription>
+                  <CartItemList
+                    cartItemList={cartItemsList}
+                    getCartItems={getCartItems}
+                  />
+                </SheetDescription>
+              </SheetHeader>
+              <SheetClose asChild>
+                <div className="absolute bottom-6 w-[90%] flex flex-col gap-3">
+                  <h2 className="text-lg text-black font-bold flex justify-between items-center">
+                    Subtotal: &#8377;{subtotal}
+                  </h2>
+                  <Button
+                    onClick={() => router.push(jwt ? "/checkout" : "/sign-in")}
+                  >
+                    View Cart
+                  </Button>
+                </div>
+              </SheetClose>
+            </SheetContent>
+          </Sheet>
         )}
         {!isLogin ? (
           <Link href="/sign-in">

@@ -12,7 +12,6 @@ const getCategories = async () => {
     console.log(error);
   }
 };
-
 const getSliderImages = async () => {
   try {
     const response = await axiosClient.get("/sliders?populate=*");
@@ -97,7 +96,7 @@ const getCartItems = async (userId, jwt) => {
     const response = await axiosClient.get(
       "/user-carts?filters[userId][$eq]=" +
         userId +
-        "&[populate][products][populate][images][populate][0]=url",
+        "&[populate][product][populate][images][populate][0]=url",
       {
         headers: {
           Authorization: `Bearer ${jwt}`,
@@ -107,19 +106,48 @@ const getCartItems = async (userId, jwt) => {
     const data = response.data.data;
     console.log("data of all cart items = ", data);
     const cartItemsList = data.map((item, index) => ({
-      name: item?.attributes?.products?.data[0]?.attributes?.name,
+      name: item?.attributes?.product?.data?.attributes?.name,
       quantity: item?.attributes?.quantity,
       amount: item?.attributes?.amount,
       image:
-        item?.attributes?.products?.data[0]?.attributes?.images?.data[0]
-          ?.attributes?.url,
-      actualPrice: item?.attributes?.products?.data[0]?.attributes?.mrp,
+        item?.attributes?.product?.data?.attributes?.images?.data[0]?.attributes
+          ?.url,
+      actualPrice: item?.attributes?.product?.data?.attributes?.mrp,
       id: item?.id,
+      product: item?.attributes?.product?.data[0]?.id,
     }));
     return cartItemsList;
   } catch (error) {
     console.log("error at global api");
     console.log(error);
+    // throw new Error(error.response.data.error.message);
+  }
+};
+
+const deleteCartItem = async (id, jwt) => {
+  try {
+    const response = await axiosClient.delete(`/user-carts/${id}`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    console.log(response);
+    return response;
+  } catch (error) {
+    // throw new Error(error.response.data.error.message);
+  }
+};
+
+const createOrder = async (data, jwt) => {
+  try {
+    const response = await axiosClient.post("/orders", data, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    console.log(response);
+    return response;
+  } catch (error) {
     // throw new Error(error.response.data.error.message);
   }
 };
@@ -134,4 +162,6 @@ export default {
   signIn,
   addToCart,
   getCartItems,
+  deleteCartItem,
+  createOrder,
 };
