@@ -6,7 +6,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import Image from "next/image";
+// import Image from "next/image";
 
 function Slider({ slidersList }) {
   return (
@@ -15,14 +15,14 @@ function Slider({ slidersList }) {
         <CarouselContent>
           {slidersList?.map((slider) => (
             <CarouselItem key={slider?.id}>
-              <Image
+              {/* <Image
                 src={slider?.attributes.image?.data[0]?.attributes?.url}
                 alt="slider"
                 width={1000}
                 height={400}
                 unoptimized={true}
                 className="w-full h-[200px] object-center md:h-[400px] object-contain md:object-cover rounded-2xl"
-              />
+              /> */}
             </CarouselItem>
           ))}
         </CarouselContent>

@@ -33,6 +33,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import CartItemList from "./CartItemList";
+import LanguageChanger from "@/components/ui/languages-changer";
 
 function Header() {
   const user =
@@ -148,6 +149,7 @@ function Header() {
         </div>
       </div>
       <div className="flex items-center gap-5">
+        <LanguageChanger />
         {isLoggedIn && (
           <Sheet>
             <SheetTrigger>
