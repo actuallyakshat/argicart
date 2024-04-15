@@ -1,5 +1,3 @@
-import { toast } from "sonner";
-
 const { default: axios } = require("axios");
 
 const axiosClient = axios.create({
@@ -36,7 +34,6 @@ const getCategoriesList = async () => {
 const getAllProducts = async () => {
   try {
     const response = await axiosClient.get("/products?populate=*");
-    console.log("The data from the backend", response.data.data);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -98,17 +95,32 @@ const addToCart = async (data, jwt) => {
 const getCartItems = async (userId, jwt) => {
   try {
     const response = await axiosClient.get(
-      "/user-carts?filters[userId][$eq]=" + userId + "&populate=*",
+      "/user-carts?filters[userId][$eq]=" +
+        userId +
+        "&[populate][products][populate][images][populate][0]=url",
       {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
       }
     );
-    return response;
+    const data = response.data.data;
+    console.log("data of all cart items = ", data);
+    const cartItemsList = data.map((item, index) => ({
+      name: item?.attributes?.products?.data[0]?.attributes?.name,
+      quantity: item?.attributes?.quantity,
+      amount: item?.attributes?.amount,
+      image:
+        item?.attributes?.products?.data[0]?.attributes?.images?.data[0]
+          ?.attributes?.url,
+      actualPrice: item?.attributes?.products?.data[0]?.attributes?.mrp,
+      id: item?.id,
+    }));
+    return cartItemsList;
   } catch (error) {
+    console.log("error at global api");
     console.log(error);
-    throw new Error(error.response.data.error.message);
+    // throw new Error(error.response.data.error.message);
   }
 };
 

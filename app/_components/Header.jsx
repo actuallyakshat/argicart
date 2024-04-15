@@ -1,9 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   CircleUserRound,
   Search,
-  ShoppingBag,
   ShoppingBasket,
   ShoppingCart,
 } from "lucide-react";
@@ -22,13 +21,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { UpdateCartContext } from "../_context/UpdateCartContext";
 
 function Header() {
-  const pathname = usePathname();
-  const router = useRouter();
   const user = JSON.parse(sessionStorage.getItem("user"));
   const jwt = sessionStorage.getItem("jwt");
+  const pathname = usePathname();
+  const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { updateCart, setUpdateCart } = useContext(UpdateCartContext);
   const [categoryList, setCategoryList] = useState([]);
+  const [cartItemsList, setCartItemsList] = useState([]);
   const [totalCartItems, setTotalCartItems] = useState(0);
   const isLogin = sessionStorage.getItem("jwt") ? true : false;
   const showHeader =
@@ -39,10 +42,10 @@ function Header() {
   }, []);
 
   useEffect(() => {
-    getCartItems();
-  }, []);
-
-  if (!showHeader) return null;
+    if (jwt) {
+      setIsLoggedIn(true);
+    }
+  }, [jwt]);
 
   const signOut = () => {
     sessionStorage.clear();
@@ -51,9 +54,15 @@ function Header() {
   };
 
   const getCartItems = async () => {
-    const cartItemsList = await GlobalApi.getCartItems(user?.id, jwt);
-    setTotalCartItems(cartItemsList?.data?.data?.length);
+    const cartItemsList_ = await GlobalApi.getCartItems(user?.id, jwt);
+    setTotalCartItems(cartItemsList_?.length);
+    setCartItemsList(cartItemsList_);
+    console.log(cartItemsList_);
   };
+
+  useEffect(() => {
+    getCartItems();
+  }, [updateCart, isLoggedIn]);
 
   function getCategoriesList() {
     GlobalApi.getCategories().then((res) => {
@@ -61,6 +70,9 @@ function Header() {
       console.log(res?.data?.data);
     });
   }
+
+  if (!showHeader) return null;
+
   return (
     <div className="p-5 shadow-md flex justify-between">
       <div className="flex items-center gap-8">
@@ -110,12 +122,14 @@ function Header() {
         </div>
       </div>
       <div className="flex items-center gap-5">
-        <h2 className="flex gap-2 items-center text-lg">
-          <ShoppingBasket className="size-7" />{" "}
-          <span className="bg-primary text-white px-2 rounded-full">
-            {totalCartItems}
-          </span>
-        </h2>
+        {isLoggedIn && (
+          <h2 className="flex gap-2 items-center text-lg">
+            <ShoppingBasket className="size-7" />{" "}
+            <span className="bg-primary text-white px-2 rounded-full">
+              {totalCartItems}
+            </span>
+          </h2>
+        )}
         {!isLogin ? (
           <Link href="/sign-in">
             <Button>Login</Button>
