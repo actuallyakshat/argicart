@@ -24,8 +24,12 @@ import { toast } from "sonner";
 import { UpdateCartContext } from "../_context/UpdateCartContext";
 
 function Header() {
-  const user = JSON.parse(sessionStorage.getItem("user"));
-  const jwt = sessionStorage.getItem("jwt");
+  const user =
+    typeof window !== "undefined"
+      ? JSON.parse(sessionStorage.getItem("user"))
+      : null;
+  const jwt =
+    typeof window !== "undefined" ? sessionStorage.getItem("jwt") : null;
   const pathname = usePathname();
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
