@@ -14,7 +14,7 @@ function Slider({ slidersList }) {
       <Carousel>
         <CarouselContent>
           {slidersList?.map((slider) => (
-            <CarouselItem key={slider?.id} asChild>
+            <CarouselItem key={slider?.id}>
               <Image
                 src={
                   process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
