@@ -1,11 +1,14 @@
+'use client';
 import React from "react";
 import ProductItem from "./ProductItem";
+import { useTranslation } from "react-i18next";
 
 export const ProductList = ({ productList }) => {
+  const { t } = useTranslation();
   return (
     <div className="mt-10">
       <h2 className="text-2xl font-black mt-5 text-green-600">
-        Our Popular Products
+        {t('our_popular_products')}
       </h2>
       <div className="mt-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5">
         {productList?.length > 0 &&

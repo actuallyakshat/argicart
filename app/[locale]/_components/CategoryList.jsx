@@ -1,12 +1,15 @@
+'use client';
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export const CategoryList = ({ categoryList }) => {
+  const { t } = useTranslation();
   return (
     <div>
       <h2 className="text-2xl font-black mt-5 text-green-600">
-        Shop by category
+        {t('shop_by_category')}
       </h2>
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
         {categoryList?.map((category) => (
