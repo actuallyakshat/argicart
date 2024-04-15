@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 import { ShoppingBasket } from "lucide-react";
 import Image from "next/image";
 import React, { useContext, useState } from "react";
-import GlobalApi from "../_utils/GlobalApi";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { UpdateCartContext } from "../_context/UpdateCartContext";
+import GlobalApi from "../_utils/GlobalApi";
 
 function ProductItemDetail({ product }) {
   console.log("product is : ", product);

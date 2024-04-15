@@ -1,6 +1,5 @@
 "use client";
 
-import GlobalApi from "@/app/_utils/GlobalApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
@@ -9,6 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import GlobalApi from "../../_utils/GlobalApi";
 
 export default function SignIn() {
   const [loading, setLoading] = useState(false);

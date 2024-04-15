@@ -16,12 +16,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import GlobalApi from "../_utils/GlobalApi";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { UpdateCartContext } from "../_context/UpdateCartContext";
+import GlobalApi from "../_utils/GlobalApi";
 
 import {
   Sheet,

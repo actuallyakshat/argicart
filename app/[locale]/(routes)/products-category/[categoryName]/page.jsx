@@ -1,6 +1,6 @@
-import GlobalApi from "@/app/_utils/GlobalApi";
+import GlobalApi from "@/app/[locale]/_utils/GlobalApi";
 import TopCategoryList from "./_components/TopCategoryList";
-import { ProductList } from "@/app/_components/ProductList";
+import { ProductList } from "@/app/[locale]/_components/ProductList";
 import { formatParamUrl } from "@/lib/functions/formatParamUrl";
 export default async function ProductCategory({ params }) {
   const productList = await GlobalApi.getProductsByCategory(
